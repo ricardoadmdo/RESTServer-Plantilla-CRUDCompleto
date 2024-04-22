@@ -1,6 +1,13 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { validarCampos } = require('../middlewares/validar-campos');
+
+const {
+	validarCampos,
+	validarJWT,
+	esAdminRole,
+	tieneRole,
+} = require('../middlewares');
+
 const {
 	esRoleValido,
 	emailExiste,
@@ -11,7 +18,6 @@ const {
 	usuariosPut,
 	usuariosPost,
 	usuariosDelete,
-	usuariosPatch,
 } = require('../controllers/usuarios');
 const router = Router();
 
@@ -47,11 +53,12 @@ router.put(
 	usuariosPut
 );
 
-router.patch('/:id', usuariosPatch);
-
 router.delete(
 	'/:id',
 	[
+		validarJWT,
+		// esAdminRole, //Middleware para que se permita solo si es ADMIN
+		tieneRole('ADMIN_ROLE', 'USER_ROLE'), //Middleware para permitir el rol especificado
 		check('id', 'No es un ID válido de Mongo').isMongoId(),
 		check('id').custom(existeUsuarioPorId),
 		validarCampos,

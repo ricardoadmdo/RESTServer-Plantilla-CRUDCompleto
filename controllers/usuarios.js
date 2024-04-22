@@ -60,18 +60,9 @@ const usuariosDelete = async (req, res) => {
 	res.json({ msg: 'Usuario eliminado: ', usuario });
 };
 
-const usuariosPatch = (req, res) => {
-	const id = req.params.id;
-
-	res.json({
-		msg: 'patch API - controlador',
-		id,
-	});
-};
 module.exports = {
 	usuariosGet,
 	usuariosPut,
 	usuariosPost,
 	usuariosDelete,
-	usuariosPatch,
 };
